@@ -65,37 +65,43 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Center(
-                  child: Text('Memories now and forever', 
+                  child: Text('Memories Now and Forever', 
                   style: GoogleFonts.dancingScript(
                     textStyle: TextStyle(fontSize: 24.0),
                   ),
                   ),
                 ),
               ),
-              Divider(color: Colors.black, indent: 0, endIndent: 0, thickness: 10, ),
+              Divider(color: Colors.grey, indent: 0, endIndent: 0, thickness: 10),
               ListTile(
                 leading: Icon(Icons.event_note, color: Colors.green),
-                title: Text('Jot down a few lines'),
+                title: Text('WRITE'),
+                subtitle: Text('Jot down a few lines'),
               ),
-              Divider(color: Colors.black, thickness: 5, ),
-              ListTile(
-                leading: Icon(Icons.camera_alt, color: Colors.green),
-                title: Text('Take a picture worth a thousand words'),
+              Divider(color: Colors.grey, thickness: 5, ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  trailing: Icon(Icons.camera_alt, color: Colors.green),
+                  title: Text('CAPTURE'),
+                  subtitle: Text('Take a picture worth a thousand words'),
+                ),
               ),
-              Divider(color: Colors.black, indent: 10, endIndent: 10, thickness: 5, ),
+              Divider(color: Colors.grey, indent: 10, endIndent: 10, thickness: 5),
               ListTile(
                 leading: Icon(Icons.videocam, color: Colors.green),
-                title: Text('Tell a story and make a video'),
+                title: Text('RECORD'),
+                subtitle: Text('Tell a story and make a video'),
               ),
-              Divider(color: Colors.black, indent: 10, endIndent: 10, thickness: 5, ),
+              Divider(color: Colors.grey, indent: 10, endIndent: 10, thickness: 10),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Center(
-                  child: Text('Inspirational Quote Here...', 
+                  child: Text('Our greatest need is to remember. \n \t ~ Spencer W. Kimball', 
                   style: GoogleFonts.dancingScript(
-                    textStyle: TextStyle(fontSize: 24.0),
+                    textStyle: TextStyle(fontSize: 20.0),
                   ),
                   ),
                 ),
