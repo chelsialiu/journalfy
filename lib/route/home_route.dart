@@ -23,8 +23,7 @@ class _HomeRouteState extends State<HomeRoute> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
+    // This method is rerun every time setState is called
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
@@ -43,9 +42,9 @@ class _HomeRouteState extends State<HomeRoute> {
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
                   child: Text('Memories Now and Forever', 
-                  style: GoogleFonts.dancingScript(
-                    textStyle: TextStyle(fontSize: 24.0),
-                  ),
+                    style: GoogleFonts.dancingScript(
+                      textStyle: TextStyle(fontSize: 24.0),
+                    ),
                   ),
                 ),
               ),
@@ -62,6 +61,14 @@ class _HomeRouteState extends State<HomeRoute> {
                   trailing: Icon(Icons.camera_alt, color: Colors.green),
                   title: Text('CAPTURE'),
                   subtitle: Text('Take a picture worth a thousand words'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CameraRoute(),
+                        ),
+                    );
+                  }
                 ),
               ),
               Divider(color: Colors.grey, indent: 10, endIndent: 10, thickness: 5),
@@ -75,9 +82,9 @@ class _HomeRouteState extends State<HomeRoute> {
                 padding: EdgeInsets.all(20),
                 child: Center(
                   child: Text('Our greatest need is to remember. \n ~ Spencer W. Kimball', 
-                  style: GoogleFonts.cinzel(
-                    textStyle: TextStyle(fontSize: 20.0),
-                  ),
+                    style: GoogleFonts.cinzel(
+                      textStyle: TextStyle(fontSize: 20.0),
+                    ),
                   ),
                 ),
               ),
