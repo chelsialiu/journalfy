@@ -21,12 +21,14 @@ class CameraRoute extends StatefulWidget {
 class CameraRouteState extends State<CameraRoute> {
   // Add two variables to the state class to store the CameraController and
   // the Future.
-   // Establishes a conection to the device's camera that allows you to control the camera and display a preview of the camera's feed
+  // Establishes a conection to the device's camera that allows you to control the camera and display a preview of the camera's feed
   CameraController _controller;
-  Future<void> _initializeControllerFuture; // stores the Future retruend form CameraController.intialize()
+  Future<void>
+      _initializeControllerFuture; // stores the Future retruend form CameraController.intialize()
 
   @override
-  void initState() { // Must intialize the CameraController to display a preview and take pictures
+  void initState() {
+    // Must intialize the CameraController to display a preview and take pictures
     super.initState();
     // To display the current output from the camera,
     // create a CameraController.
@@ -76,18 +78,20 @@ class CameraRouteState extends State<CameraRoute> {
           try {
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
+            var documentsDirectory = await getApplicationDocumentsDirectory();
+            var imageFileName = 'img${DateTime.now()}.png';
 
             // Construct the path where the image should be saved using the
             // pattern package.
-            final path = join(
-              // Store the picture in the temp directory.
-              // Find the temp directory using the `path_provider` plugin.
-              (await getTemporaryDirectory()).path,
-              '${DateTime.now()}.png',
-            );
+            final path = join(documentsDirectory.path, imageFileName);
+
+            print("# Files: ${documentsDirectory.listSync().length}");
+            documentsDirectory.listSync().forEach((f) => print("File Name: ${f.path}"));
 
             // Attempt to take a picture and log where it's been saved.
             await _controller.takePicture(path);
+            print("# Files 2: ${documentsDirectory.listSync().length}");
+            documentsDirectory.listSync().forEach((f) => print("File Name 2: ${f.path}"));
 
             // If the picture was taken, display it on a new screen.
             Navigator.push(
