@@ -24,10 +24,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   google_fonts: ^0.4.0
-  camera: ^0.5.7+4
-  path_provider: ^1.6.5
+  camera: ^0.5.7+4 # Provides tools to work with the cameras on the device
+  path_provider: ^1.6.5 # Finds correct paths to store media
   path: ^1.6.4
   provider: ^4.0.4
+  video_provider: ^1.2.3+1 # To play the recorded video
+  esys_flutter_share: ^1.0.2 # For sharing media files with other applications
+  thumbnails: # For generating thumbnails from the video
+    git:
+      url: https://github.com/divyanshub024/Flutter_Thumbnails.git
 
 dev_dependencies:
   flutter_test:
