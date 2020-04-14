@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:journalfy/route/gallery_view_route.dart';
@@ -12,13 +10,6 @@ import 'package:journalfy/route/video_timer.dart';
 import 'package:path/path.dart' as path;
 
 class VideoRoute extends StatefulWidget {
-  // final CameraDescription camera;
-
-  // const VideoRoute({
-  //   Key key,
-  //   @required this.camera,
-  // }) : super(key: key);
-
   const VideoRoute({Key key}) : super(key: key);
 
   @override
@@ -36,11 +27,11 @@ class VideoRouteState extends State<VideoRoute>
 
   @override
   void initState() {
-    _initCamera();
+    _initVideo();
     super.initState();
   }
 
-  Future<void> _initCamera() async {
+  Future<void> _initVideo() async {
     _cameras = await availableCameras();
     _controller = CameraController(_cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
@@ -51,26 +42,6 @@ class VideoRouteState extends State<VideoRoute>
     });
   }
 
-  // Future<void>
-  //     _initializeControllerFuture; // stores the Future returned from CameraController.intialize()
-
-  // @override
-  // void initState() {
-  //   // Must intialize the CameraController to display a preview and take pictures
-  //   super.initState();
-  //   // To display the current output from the camera,
-  //   // create a CameraController.
-  //   _controller = CameraController(
-  //     // Get a specific camera from the list of available cameras.
-  //     widget.camera,
-  //     // Define the resolution to use.
-  //     ResolutionPreset.medium,
-  //   );
-
-  //   // Next, initialize the controller. This returns a Future.
-  //   _initializeControllerFuture = _controller.initialize();
-  // }
-
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
@@ -80,6 +51,25 @@ class VideoRouteState extends State<VideoRoute>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    if (_controller != null) {
+      if (!_controller.value.isInitialized) {
+        return Container();
+      }
+    } else {
+      return const Center(
+        child: SizedBox(
+          width: 32,
+          height: 32,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (!_controller.value.isInitialized) {
+      return Container();
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text("RECORD a Story")),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -88,28 +78,16 @@ class VideoRouteState extends State<VideoRoute>
       body: Stack(
         children: <Widget>[
           _buildCameraPreview(context),
+          // NEEDSWORK
+          // Potentially add other functionalities here (i.e. Zoom, flash, etc)
           Positioned(
-            top: 24.0,
-            left: 12.0,
-            child: IconButton(
-              icon: Icon(
-                Icons.switch_camera,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                _onCameraSwitch();
-              },
+            left: 0,
+            right: 0,
+            top: 32.0,
+            child: VideoTimer(
+              key: _timerKey,
             ),
-          ),
-          if (_isRecordingMode)
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 32.0,
-              child: VideoTimer(
-                key: _timerKey,
-              ),
-            )
+          )
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
@@ -139,7 +117,7 @@ class VideoRouteState extends State<VideoRoute>
       height: 100.0,
       width: double.infinity,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           FutureBuilder(
             future: getLastImage(),
@@ -160,8 +138,7 @@ class VideoRouteState extends State<VideoRoute>
                 child: Container(
                   width: 40.0,
                   height: 40.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
+                  child: ClipOval(
                     child: Image.file(
                       snapshot.data,
                       fit: BoxFit.cover,
@@ -172,39 +149,38 @@ class VideoRouteState extends State<VideoRoute>
             },
           ),
           CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.grey[300],
             radius: 28.0,
             child: IconButton(
               icon: Icon(
-                (_isRecordingMode)
-                    ? (_isRecording) ? Icons.stop : Icons.videocam
-                    : Icons.camera_alt,
+                (_isRecording) ? Icons.stop : Icons.fiber_manual_record,
                 size: 28.0,
-                color: (_isRecording) ? Colors.red : Colors.black,
+                color: Colors.red,
               ),
               onPressed: () {
-                if (!_isRecordingMode) {
-                  _captureImage();
+                if (_isRecording) {
+                  stopVideoRecording();
                 } else {
-                  if (_isRecording) {
-                    stopVideoRecording();
-                  } else {
-                    startVideoRecording();
-                  }
+                  startVideoRecording();
                 }
               },
             ),
           ),
-          IconButton(
-            icon: Icon(
-              (_isRecordingMode) ? Icons.camera_alt : Icons.videocam,
-              color: Colors.white,
+          CircleAvatar(
+            backgroundColor: Colors.green,
+            radius: 24.0,
+            child: IconButton(
+              icon: Icon(
+                Icons.switch_video,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                _onVideoSwitch();
+                setState(() {
+                  _isRecordingMode = !_isRecordingMode;
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                _isRecordingMode = !_isRecordingMode;
-              });
-            },
           ),
         ],
       ),
@@ -231,7 +207,7 @@ class VideoRouteState extends State<VideoRoute>
     }
   }
 
-  Future<void> _onCameraSwitch() async {
+  Future<void> _onVideoSwitch() async {
     final CameraDescription cameraDescription =
         (_controller.description == _cameras[0]) ? _cameras[1] : _cameras[0];
     if (_controller != null) {
@@ -252,20 +228,6 @@ class VideoRouteState extends State<VideoRoute>
     }
 
     if (mounted) {
-      setState(() {});
-    }
-  }
-
-  void _captureImage() async {
-    print('_captureImage');
-    if (_controller.value.isInitialized) {
-      SystemSound.play(SystemSoundType.click);
-      final Directory extDir = await getApplicationDocumentsDirectory();
-      final String dirPath = '${extDir.path}/media';
-      await Directory(dirPath).create(recursive: true);
-      final String filePath = '$dirPath/${_timestamp()}.jpeg';
-      print('path: $filePath');
-      await _controller.takePicture(filePath);
       setState(() {});
     }
   }
@@ -291,7 +253,7 @@ class VideoRouteState extends State<VideoRoute>
     }
 
     try {
-    //  videoPath = filePath;
+      //  videoPath = filePath;
       await _controller.startVideoRecording(filePath);
     } on CameraException catch (e) {
       _showCameraException(e);

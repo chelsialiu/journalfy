@@ -41,13 +41,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
+	<!-- <key>NSCameraUsageDescription</key>
 	<string>Enable journalfy to access your camera to capture your photo</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Enable journalfy to access mic to record your voice</string>
+	<string>Enable journalfy to access mic to record your voice</string> -->
 </dict>
-<dict>
+<!-- <dict>
   <key>NSAllowsArbitraryLoads</key>
   <true/>
-</dict>
+</dict> -->
 </plist>
