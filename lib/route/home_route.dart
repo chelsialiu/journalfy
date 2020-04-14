@@ -93,8 +93,8 @@ class _HomeRouteState extends State<HomeRoute> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        // builder: (context) => VideoRoute(),
-                        builder: (context) => VideoPlayerScreen(),
+                        builder: (context) => VideoRoute(),
+                        // builder: (context) => VideoPlayerScreen(), // Used this to test video playback
                       ),
                     );
                   }),
