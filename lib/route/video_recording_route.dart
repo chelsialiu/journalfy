@@ -1,4 +1,7 @@
 // A screen that takes in a list of cameras and the Directory to store images.
+// LOOK INTO THIS: https://github.com/flutter-devs/flutter_video_recorder | https://www.woolha.com/tutorials/flutter-video-capture-example
+// And this: https://github.com/divyanshub024/flutter_camera/tree/master/lib
+// Resource: https://levelup.gitconnected.com/exploring-flutter-camera-plugin-d2c54ac95f05
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -201,6 +204,7 @@ class VideoRouteState extends State<VideoRoute>
     if (extension == '.jpeg') {
       return lastFile;
     } else {
+      print("This was a video! " + dirPath);
       String thumb = await Thumbnails.getThumbnail(
           videoFile: lastFile.path, imageType: ThumbFormat.PNG, quality: 30);
       return File(thumb);

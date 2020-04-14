@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journalfy/route/video_recording_route.dart';
 import 'package:journalfy/route/camera_route.dart';
+import 'package:journalfy/route/video_test.dart';
 
 class HomeRoute extends StatefulWidget {
   HomeRoute({Key key, this.title}) : super(key: key);
@@ -92,7 +93,8 @@ class _HomeRouteState extends State<HomeRoute> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => VideoRoute(),
+                        // builder: (context) => VideoRoute(),
+                        builder: (context) => VideoPlayerScreen(),
                       ),
                     );
                   }),
