@@ -11,7 +11,7 @@ import 'gallery_view_route.dart';
 import 'video_timer.dart';
 import 'package:path/path.dart' as path;
 
-class CameraRoute extends StatefulWidget {
+class VideoRoute extends StatefulWidget {
   // final CameraDescription camera;
 
   // const VideoRoute({
@@ -19,13 +19,13 @@ class CameraRoute extends StatefulWidget {
   //   @required this.camera,
   // }) : super(key: key);
 
-  const CameraRoute({Key key}) : super(key: key);
+  const VideoRoute({Key key}) : super(key: key);
 
   @override
-  CameraRouteState createState() => CameraRouteState();
+  VideoRouteState createState() => VideoRouteState();
 }
 
-class CameraRouteState extends State<CameraRoute>
+class VideoRouteState extends State<VideoRoute>
     with AutomaticKeepAliveClientMixin {
   CameraController _controller;
   List<CameraDescription> _cameras;
@@ -80,25 +80,6 @@ class CameraRouteState extends State<CameraRoute>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    if (_controller != null) {
-      if (!_controller.value.isInitialized) {
-        return Container();
-      }
-    } else {
-      return const Center(
-        child: SizedBox(
-          width: 32,
-          height: 32,
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-    if (!_controller.value.isInitialized) {
-      return Container();
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
@@ -251,7 +232,7 @@ class CameraRouteState extends State<CameraRoute>
 
   Future<void> _onCameraSwitch() async {
     final CameraDescription cameraDescription =
-        (_controller.description == _cameras[0]) ? _cameras[1] : _cameras[0];
+        (_controller.description == _cameras[1]) ? _cameras[1] : _cameras[0];
     if (_controller != null) {
       await _controller.dispose();
     }

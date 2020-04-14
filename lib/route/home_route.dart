@@ -1,11 +1,10 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:journalfy/route/video_recording_route.dart';
 import 'camera_route.dart';
 
 class HomeRoute extends StatefulWidget {
-  HomeRoute({Key key, this.title, this.camera}) : super(key: key);
+  HomeRoute({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,7 +14,6 @@ class HomeRoute extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-  final CameraDescription camera;
   final String title;
 
   @override
@@ -30,7 +28,6 @@ class _HomeRouteState extends State<HomeRoute> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Consumer<CameraDescription>(builder: (context, camera, child) {
       return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -73,7 +70,7 @@ class _HomeRouteState extends State<HomeRoute> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CameraRoute(camera: widget.camera),
+                          builder: (context) => CameraRoute(),
                         ),
                       );
                     }),
@@ -81,10 +78,17 @@ class _HomeRouteState extends State<HomeRoute> {
               Divider(
                   color: Colors.grey, indent: 10, endIndent: 10, thickness: 5),
               ListTile(
-                leading: Icon(Icons.videocam, color: Colors.green),
-                title: Text('RECORD'),
-                subtitle: Text('Tell a story and make a video'),
-              ),
+                  leading: Icon(Icons.videocam, color: Colors.green),
+                  title: Text('RECORD'),
+                  subtitle: Text('Tell a story and make a video'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoRoute(),
+                      ),
+                    );
+                  }),
               Divider(
                   color: Colors.grey, indent: 10, endIndent: 10, thickness: 10),
               Padding(
@@ -102,8 +106,5 @@ class _HomeRouteState extends State<HomeRoute> {
           ),
         ),
       );
-    }
-    )
-    ;
   }
 }
