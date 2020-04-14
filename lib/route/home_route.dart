@@ -1,11 +1,11 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'camera_route.dart';
+import 'package:journalfy/route/video_recording_route.dart';
+import 'package:journalfy/route/camera_route.dart';
+import 'package:journalfy/route/video_test.dart';
 
 class HomeRoute extends StatefulWidget {
-  HomeRoute({Key key, this.title, this.camera}) : super(key: key);
+  HomeRoute({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,7 +15,6 @@ class HomeRoute extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-  final CameraDescription camera;
   final String title;
 
   @override
@@ -30,11 +29,11 @@ class _HomeRouteState extends State<HomeRoute> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Consumer<CameraDescription>(builder: (context, camera, child) {
       return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
+          centerTitle: true,
           title: Text(widget.title),
         ),
         body: Container(
@@ -47,7 +46,7 @@ class _HomeRouteState extends State<HomeRoute> {
                   child: Text(
                     'Memories Now and Forever',
                     style: GoogleFonts.dancingScript(
-                      textStyle: TextStyle(fontSize: 24.0),
+                      textStyle: TextStyle(fontSize: 26.0),
                     ),
                   ),
                 ),
@@ -55,7 +54,9 @@ class _HomeRouteState extends State<HomeRoute> {
               Divider(
                   color: Colors.grey, indent: 0, endIndent: 0, thickness: 10),
               ListTile(
-                leading: Icon(Icons.event_note, color: Colors.green),
+                leading: new LayoutBuilder(builder: (context, constraint){
+                    return Icon(Icons.event_note, color: Colors.green, size: constraint.biggest.height);
+                  }),
                 title: Text('WRITE'),
                 subtitle: Text('Jot down a few lines'),
               ),
@@ -66,14 +67,16 @@ class _HomeRouteState extends State<HomeRoute> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                    trailing: Icon(Icons.camera_alt, color: Colors.green),
+                  trailing: new LayoutBuilder(builder: (context, constraint){
+                    return Icon(Icons.camera_alt, color: Colors.green, size: constraint.biggest.height);
+                  }),
                     title: Text('CAPTURE'),
                     subtitle: Text('Take a picture worth a thousand words'),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CameraRoute(camera: widget.camera),
+                          builder: (context) => CameraRoute(),
                         ),
                       );
                     }),
@@ -81,10 +84,20 @@ class _HomeRouteState extends State<HomeRoute> {
               Divider(
                   color: Colors.grey, indent: 10, endIndent: 10, thickness: 5),
               ListTile(
-                leading: Icon(Icons.videocam, color: Colors.green),
-                title: Text('RECORD'),
-                subtitle: Text('Tell a story and make a video'),
-              ),
+                  leading: new LayoutBuilder(builder: (context, constraint){
+                    return Icon(Icons.videocam, color: Colors.green, size: constraint.biggest.height);
+                  }),
+                  title: Text('RECORD'),
+                  subtitle: Text('Tell a story and make a video'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        // builder: (context) => VideoRoute(),
+                        builder: (context) => VideoPlayerScreen(),
+                      ),
+                    );
+                  }),
               Divider(
                   color: Colors.grey, indent: 10, endIndent: 10, thickness: 10),
               Padding(
@@ -92,6 +105,7 @@ class _HomeRouteState extends State<HomeRoute> {
                 child: Center(
                   child: Text(
                     'Our greatest need is to remember. \n ~ Spencer W. Kimball',
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.cinzel(
                       textStyle: TextStyle(fontSize: 20.0),
                     ),
@@ -102,8 +116,5 @@ class _HomeRouteState extends State<HomeRoute> {
           ),
         ),
       );
-    }
-    )
-    ;
   }
 }

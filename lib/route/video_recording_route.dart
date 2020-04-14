@@ -1,35 +1,40 @@
 // A screen that takes in a list of cameras and the Directory to store images.
+// LOOK INTO THIS: https://github.com/flutter-devs/flutter_video_recorder | https://www.woolha.com/tutorials/flutter-video-capture-example
+// And this: https://github.com/divyanshub024/flutter_camera/tree/master/lib
+// Resource: https://levelup.gitconnected.com/exploring-flutter-camera-plugin-d2c54ac95f05
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:journalfy/route/gallery_view_route.dart';
+import 'package:journalfy/route/video_timer.dart';
 import 'package:path/path.dart' as path;
 
-class CameraRoute extends StatefulWidget {
-  const CameraRoute({Key key}) : super(key: key);
+class VideoRoute extends StatefulWidget {
+  const VideoRoute({Key key}) : super(key: key);
 
   @override
-  CameraRouteState createState() => CameraRouteState();
+  VideoRouteState createState() => VideoRouteState();
 }
 
-class CameraRouteState extends State<CameraRoute>
+class VideoRouteState extends State<VideoRoute>
     with AutomaticKeepAliveClientMixin {
   CameraController _controller;
   List<CameraDescription> _cameras;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isRecordingMode = true;
+  bool _isRecording = false;
+  final _timerKey = GlobalKey<VideoTimerState>();
 
   @override
   void initState() {
-    _initCamera();
+    _initVideo();
     super.initState();
   }
 
-  Future<void> _initCamera() async {
+  Future<void> _initVideo() async {
     _cameras = await availableCameras();
     _controller = CameraController(_cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
@@ -69,7 +74,7 @@ class CameraRouteState extends State<CameraRoute>
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text("CAPTURE a Picture")),
+      appBar: AppBar(title: Text("RECORD a Story")),
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
       extendBody: true,
@@ -77,7 +82,15 @@ class CameraRouteState extends State<CameraRoute>
         children: <Widget>[
           _buildCameraPreview(context),
           // NEEDSWORK
-          // Potentially add other camera functionalities here (i.e. Zoom, flash, etc)
+          // Potentially add other functionalities here (i.e. Zoom, flash, etc)
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 32.0,
+            child: VideoTimer(
+              key: _timerKey,
+            ),
+          )
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
@@ -139,16 +152,20 @@ class CameraRouteState extends State<CameraRoute>
             },
           ),
           CircleAvatar(
-            backgroundColor: Colors.green,
+            backgroundColor: Colors.grey[300],
             radius: 28.0,
             child: IconButton(
               icon: Icon(
-                Icons.camera_alt,
+                (_isRecording) ? Icons.stop : Icons.fiber_manual_record,
                 size: 28.0,
-                color: Colors.white,
+                color: Colors.red,
               ),
               onPressed: () {
-                _captureImage();
+                if (_isRecording) {
+                  stopVideoRecording();
+                } else {
+                  startVideoRecording();
+                }
               },
             ),
           ),
@@ -157,12 +174,14 @@ class CameraRouteState extends State<CameraRoute>
             radius: 24.0,
             child: IconButton(
               icon: Icon(
-                Icons.switch_camera,
-                size: 24.0,
+                Icons.switch_video,
                 color: Colors.white,
               ),
               onPressed: () {
-                _onCameraSwitch();
+                _onVideoSwitch();
+                setState(() {
+                  _isRecordingMode = !_isRecordingMode;
+                });
               },
             ),
           ),
@@ -185,13 +204,14 @@ class CameraRouteState extends State<CameraRoute>
     if (extension == '.jpeg') {
       return lastFile;
     } else {
+      print("This was a video! " + dirPath);
       String thumb = await Thumbnails.getThumbnail(
           videoFile: lastFile.path, imageType: ThumbFormat.PNG, quality: 30);
       return File(thumb);
     }
   }
 
-  Future<void> _onCameraSwitch() async {
+  Future<void> _onVideoSwitch() async {
     final CameraDescription cameraDescription =
         (_controller.description == _cameras[0]) ? _cameras[1] : _cameras[0];
     if (_controller != null) {
@@ -216,17 +236,50 @@ class CameraRouteState extends State<CameraRoute>
     }
   }
 
-  void _captureImage() async {
-    print('_captureImage');
-    if (_controller.value.isInitialized) {
-      SystemSound.play(SystemSoundType.click);
-      final Directory extDir = await getApplicationDocumentsDirectory();
-      final String dirPath = '${extDir.path}/media';
-      await Directory(dirPath).create(recursive: true);
-      final String filePath = '$dirPath/${_timestamp()}.jpeg';
-      print('path: $filePath');
-      await _controller.takePicture(filePath);
-      setState(() {});
+  Future<String> startVideoRecording() async {
+    print('startVideoRecording');
+    if (!_controller.value.isInitialized) {
+      return null;
+    }
+    setState(() {
+      _isRecording = true;
+    });
+    _timerKey.currentState.startTimer();
+
+    final Directory extDir = await getApplicationDocumentsDirectory();
+    final String dirPath = '${extDir.path}/media';
+    await Directory(dirPath).create(recursive: true);
+    final String filePath = '$dirPath/${_timestamp()}.mp4';
+
+    if (_controller.value.isRecordingVideo) {
+      // A recording is already started, do nothing.
+      return null;
+    }
+
+    try {
+      //  videoPath = filePath;
+      await _controller.startVideoRecording(filePath);
+    } on CameraException catch (e) {
+      _showCameraException(e);
+      return null;
+    }
+    return filePath;
+  }
+
+  Future<void> stopVideoRecording() async {
+    if (!_controller.value.isRecordingVideo) {
+      return null;
+    }
+    _timerKey.currentState.stopTimer();
+    setState(() {
+      _isRecording = false;
+    });
+
+    try {
+      await _controller.stopVideoRecording();
+    } on CameraException catch (e) {
+      _showCameraException(e);
+      return null;
     }
   }
 
