@@ -4,7 +4,7 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'video_preview.dart';
+import 'package:journalfy/route/video_preview.dart';
 
 class Gallery extends StatefulWidget {
   @override

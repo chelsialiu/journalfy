@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'video_controls.dart';
+import 'package:journalfy/route/video_controls.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreview extends StatefulWidget {

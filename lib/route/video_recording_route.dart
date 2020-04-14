@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thumbnails/thumbnails.dart';
-import 'gallery_view_route.dart';
-import 'video_timer.dart';
+import 'package:journalfy/route/gallery_view_route.dart';
+import 'package:journalfy/route/video_timer.dart';
 import 'package:path/path.dart' as path;
 
 class VideoRoute extends StatefulWidget {
@@ -30,7 +30,7 @@ class VideoRouteState extends State<VideoRoute>
   CameraController _controller;
   List<CameraDescription> _cameras;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isRecordingMode = false;
+  bool _isRecordingMode = true;
   bool _isRecording = false;
   final _timerKey = GlobalKey<VideoTimerState>();
 
@@ -81,6 +81,7 @@ class VideoRouteState extends State<VideoRoute>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("RECORD a Story")),
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
       extendBody: true,
@@ -232,7 +233,7 @@ class VideoRouteState extends State<VideoRoute>
 
   Future<void> _onCameraSwitch() async {
     final CameraDescription cameraDescription =
-        (_controller.description == _cameras[1]) ? _cameras[1] : _cameras[0];
+        (_controller.description == _cameras[0]) ? _cameras[1] : _cameras[0];
     if (_controller != null) {
       await _controller.dispose();
     }
