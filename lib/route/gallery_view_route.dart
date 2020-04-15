@@ -47,7 +47,6 @@ class _GalleryState extends State<Gallery> {
                   ),
                 );
               } else {
-                // return Text("TEST");
                 return VideoPreview(
                   videoPath: snapshot.data[index].path,
                 );
