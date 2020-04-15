@@ -16,9 +16,10 @@ class _GalleryState extends State<Gallery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        title: Text("GALLERY"),
+        backgroundColor: Colors.green,
       ),
       body: FutureBuilder(
         future: _getAllImages(),
@@ -40,10 +41,9 @@ class _GalleryState extends State<Gallery> {
               var extension = path.extension(snapshot.data[index].path);
               if (extension == '.jpeg') {
                 return Container(
-                  height: 300,
-                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: Image.file(
                     File(snapshot.data[index].path),
+                    fit: BoxFit.contain, // As large as possible while still containing source image entirely
                   ),
                 );
               } else {

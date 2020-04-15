@@ -158,7 +158,7 @@ class VideoRouteState extends State<VideoRoute>
               icon: Icon(
                 (_isRecording) ? Icons.stop : Icons.fiber_manual_record,
                 size: 28.0,
-                color: Colors.red,
+                color: (_isRecording) ? Colors.black : Colors.red,
               ),
               onPressed: () {
                 if (_isRecording) {
@@ -174,14 +174,11 @@ class VideoRouteState extends State<VideoRoute>
             radius: 24.0,
             child: IconButton(
               icon: Icon(
-                Icons.switch_video,
-                color: Colors.white,
-              ),
+                  (!_isRecording) ? Icons.switch_video : Icons.switch_video,
+                  color: (!_isRecording) ? Colors.white : Colors.grey),
               onPressed: () {
-                _onVideoSwitch();
-                setState(() {
-                  _isRecordingMode = !_isRecordingMode;
-                });
+                (!_isRecording) ? _onVideoSwitch() : null;
+                ;
               },
             ),
           ),
@@ -204,7 +201,7 @@ class VideoRouteState extends State<VideoRoute>
     if (extension == '.jpeg') {
       return lastFile;
     } else {
-      print("This was a video! " + dirPath);
+      print(dirPath);
       String thumb = await Thumbnails.getThumbnail(
           videoFile: lastFile.path, imageType: ThumbFormat.PNG, quality: 30);
       return File(thumb);
@@ -257,7 +254,6 @@ class VideoRouteState extends State<VideoRoute>
     }
 
     try {
-      //  videoPath = filePath;
       await _controller.startVideoRecording(filePath);
     } on CameraException catch (e) {
       _showCameraException(e);
