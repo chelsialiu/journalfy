@@ -1,16 +1,15 @@
 # journalfy
 
-An application to record journal entries
+With this application, journal-keeping is made simple. Users can keep track of their memories either through writing entries, taking photos, or recording videos. 
 
-## Getting Started
+1. WRITE
+This option is similar to a typical Notes widget, allowing someone to write an entry. 
+Although these entries are being saved to the phone, additional work is being done to properly display those text files to the user.
 
-This project is a starting point for a Flutter application.
+2. CAPTURE
+This camera feature allows users to switch from the front to the back camera and also take portrait and landscape pictures. After capturing a picture, it is saved and can be viewed in the Gallery. 
 
-A few resources to get you started if this is your first Flutter project:
+3. RECORD
+This video camera feature allows users to switch from the front to the back camera and also record portrait and landscape videos. After recording a video, it is saved and can be played in the Gallery. The video camera also displays a timer, letting the user know how long their video recording is.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This may be a simple app, but most journal apps out there do not give users ALL three of these options to record journal entries. Additionally, more features will be added to the application to enhance user experience and app functionality.

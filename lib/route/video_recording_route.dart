@@ -1,7 +1,4 @@
-// A screen that takes in a list of cameras and the Directory to store images.
-// LOOK INTO THIS: https://github.com/flutter-devs/flutter_video_recorder | https://www.woolha.com/tutorials/flutter-video-capture-example
-// And this: https://github.com/divyanshub024/flutter_camera/tree/master/lib
-// Resource: https://levelup.gitconnected.com/exploring-flutter-camera-plugin-d2c54ac95f05
+// A screen that takes in a list of cameras and the Directory to store videos.
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -24,7 +21,6 @@ class VideoRouteState extends State<VideoRoute>
   CameraController _controller;
   List<CameraDescription> _cameras;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // bool _isRecordingMode = true;
   bool _isRecording = false;
   final _timerKey = GlobalKey<VideoTimerState>();
 
@@ -74,7 +70,7 @@ class VideoRouteState extends State<VideoRoute>
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text("RECORD a Story")),
+      appBar: AppBar(title: Text("RECORD a Video")),
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
       extendBody: true,

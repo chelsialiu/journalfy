@@ -26,7 +26,7 @@ class AddNote extends StatefulWidget {
 
 class _AddNoteState extends State<AddNote> {
   bool _isEditiable = true;
-  String title = 'Add Note';
+  String title = 'WRITE a Few Lines';
   List<Widget> icons;
   TextEditingController _titleControllor;
   TextEditingController _noteControllor;
