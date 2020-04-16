@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:journalfy/route/notepad_route.dart';
 import 'package:journalfy/route/video_recording_route.dart';
 import 'package:journalfy/route/camera_route.dart';
 
@@ -58,6 +59,14 @@ class _HomeRouteState extends State<HomeRoute> {
                   }),
                 title: Text('WRITE'),
                 subtitle: Text('Jot down a few lines'),
+                onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddNote(),
+                        ),
+                      );
+                    }
               ),
               Divider(
                 color: Colors.grey,

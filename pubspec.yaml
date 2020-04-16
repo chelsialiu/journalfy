@@ -34,6 +34,7 @@ dependencies:
   thumbnails: # For generating thumbnails from the video
     git:
       url: https://github.com/divyanshub024/Flutter_Thumbnails.git
+  sqflite: ^1.3.0
 
 dev_dependencies:
   flutter_test:

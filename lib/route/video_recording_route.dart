@@ -24,7 +24,7 @@ class VideoRouteState extends State<VideoRoute>
   CameraController _controller;
   List<CameraDescription> _cameras;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isRecordingMode = true;
+  // bool _isRecordingMode = true;
   bool _isRecording = false;
   final _timerKey = GlobalKey<VideoTimerState>();
 
